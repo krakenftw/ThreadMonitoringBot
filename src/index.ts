@@ -2,8 +2,9 @@ import './lib/setup';
 
 import { LogLevel, SapphireClient } from '@sapphire/framework';
 import { GatewayIntentBits } from 'discord.js';
+import { checkAllThreads } from './lib/checkAllThreads';
 
-const client = new SapphireClient({
+export const client = new SapphireClient({
 	defaultPrefix: '!',
 	caseInsensitiveCommands: true,
 	logger: {
@@ -18,6 +19,9 @@ const main = async () => {
 		client.logger.info('Logging in');
 		await client.login();
 		client.logger.info('logged in');
+		setInterval(() => {
+			checkAllThreads();
+		}, 1000);
 	} catch (error) {
 		client.logger.fatal(error);
 		await client.destroy();
