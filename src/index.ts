@@ -3,6 +3,7 @@ import './lib/setup';
 import { LogLevel, SapphireClient } from '@sapphire/framework';
 import { GatewayIntentBits } from 'discord.js';
 import { checkAllThreads } from './lib/checkAllThreads';
+import cron from 'node-cron';
 
 export const client = new SapphireClient({
 	defaultPrefix: '!',
@@ -19,9 +20,10 @@ const main = async () => {
 		client.logger.info('Logging in');
 		await client.login();
 		client.logger.info('logged in');
-		setInterval(() => {
+		cron.schedule('*/1 */2 * * *', () => {
+			'Checking now!';
 			checkAllThreads();
-		}, 1000);
+		});
 	} catch (error) {
 		client.logger.fatal(error);
 		await client.destroy();
