@@ -1,24 +1,28 @@
+// import { EmbedBuilder } from 'discord.js';
 import { EmbedBuilder } from 'discord.js';
 import { client } from '..';
 
 export const checkAllThreads = async () => {
+	console.log('Checking Time at ', Date.now());
 	const guild = await client.guilds.fetch(process.env.SERVER_ID!);
-	guild.channels.fetch();
+	await guild.channels.fetch();
 	let channels = guild.channels.cache;
-	channels = channels.filter((each) => {
+	console.log(channels.size);
+	channels.forEach((each) => {
 		if (each.isThread()) {
-			each.messages.fetch({ limit: 1 }).then((message) => {
+			each.messages.fetch({ limit: 1 }).then(async (message) => {
 				const firstMessage = message.first();
 				const twentyFourHoursAgo = Date.now();
 				console.log(twentyFourHoursAgo - firstMessage?.createdTimestamp!);
 				if (!firstMessage || twentyFourHoursAgo - firstMessage?.createdTimestamp > 86400000) {
+					console.log(each.name);
 					const randomNumber = Math.floor(Math.random() * reminderTexts.length);
 					const embed = new EmbedBuilder()
 						.setColor(16776960)
 						.setTitle('Reminder')
 						.setDescription(reminderTexts[randomNumber])
 						.setTimestamp();
-					each.send({ embeds: [embed] });
+					await each.send({ embeds: [embed] });
 				}
 			});
 		}

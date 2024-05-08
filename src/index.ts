@@ -20,8 +20,7 @@ const main = async () => {
 		client.logger.info('Logging in');
 		await client.login();
 		client.logger.info('logged in');
-		cron.schedule('*/1 */2 * * *', () => {
-			'Checking now!';
+		cron.schedule('5 */2 * * *', () => {
 			checkAllThreads();
 		});
 	} catch (error) {
